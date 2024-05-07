@@ -18,20 +18,26 @@ public class PlayerMovement : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
     }
 
+    private void Update()
+    {
+        if (moveEnabled)
+        {
+            ProcessMovementInputs();
+        }
+        ProcessCursorInputs();
+
+        m_Movement.Normalize();
+        
+        
+    }
+
     private void FixedUpdate()
     {
         if (moveEnabled)
         {
             rb.MovePosition(rb.position + m_Movement * (moveSpeed * Time.fixedDeltaTime));
             LookTowardsCursor();
-
-            ProcessMovementInputs();
         }
-        ProcessCursorInputs();
-        m_Movement.Normalize();
-
-        
-
     }
 
     private void LookTowardsCursor()
