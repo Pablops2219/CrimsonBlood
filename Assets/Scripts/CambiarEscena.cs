@@ -10,7 +10,7 @@ public class CambioDeEscenaAlColisionar : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Verifica si el objeto con el que colisionó tiene el tag "Bloque"
-        if (collision.gameObject.CompareTag("Bloque"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             // Cambia a la escena especificada
             SceneManager.LoadScene(nombreDeLaEscena);
