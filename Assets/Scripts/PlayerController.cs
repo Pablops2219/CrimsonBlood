@@ -1,32 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Vector2 = System.Numerics.Vector2;
 
 public class PlayerController : MonoBehaviour
 {
+    
     public bool isWalking { get; private set; } = false;
-    public bool isAttacking { get; private set; } = false;
     private Animator animator;
     public PlayerMovement _playerMovement;
     public int weaponEquipped = 0;
     string[,] animationWeaponStates = { {"PlayerWalk" ,"PlayerAnim" ,"PlayerAttack" },
                                         {"PlayerWalkShotgun" ,"PlayerAnimShotgun" ,"PlayerAttackShotgun" }};
 
-    public Transform bulletsSpawnPos;
+    public GameObject bala; // The bullet prefab
+    public Transform puntoDisparo; // The shooting point as a Transform
+
     
-    // Start is called before the first frame update
+    public float disparoCooldown = 0.5f;
+    public bool cooldownReady = true;
     void Start()
     {
+        Debug.Log(cooldownReady);
         animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isAttacking)
+        Debug.Log(cooldownReady);
+        if (Input.GetAxisRaw("Fire1") > 0)
         {
-            WalkingAnimator();
+            Disparar();
         }
+        WalkingAnimator();
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (weaponEquipped == 1)
@@ -39,42 +47,36 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && !isAttacking)
-        {
-            StartCoroutine(AttackAnimator());
-            
-        }
+        
     }
 
     public void WalkingAnimator()
     {
         isWalking = _playerMovement.m_Movement.magnitude > 0;
 
-        
-        //Elige la animacion de caminar segun con que arma este
-        animator.Play(animationWeaponStates[weaponEquipped,0]);
-        
+        if(isWalking)
+        {
+            animator.Play(animationWeaponStates[weaponEquipped,0]);
+        }
         if (!isWalking)
         {
-            //Sobreescribe la animacion si esta parado
             animator.Play(animationWeaponStates[weaponEquipped,1]);
             
         }
     }
 
-    
-    IEnumerator AttackAnimator()
+    private void Disparar()
     {
-        isAttacking = true;
-        animator.Play(animationWeaponStates[weaponEquipped,2]);
-        yield return new WaitForSeconds(0.3f);
-        isAttacking = false;
-        
+        if (!cooldownReady){ return; }
+        GameObject balaInst = Instantiate(bala, puntoDisparo.position, puntoDisparo.rotation);
+        balaInst.GetComponent<Bala>().SetPuntoDisparo(PlayerMovement.playerMovement.mousePos);
+        StartCoroutine(StartCooldown(disparoCooldown));
     }
 
-    public void Shoot()
+    IEnumerator StartCooldown(float cooldown)
     {
-        
-        //GameObject bulletsSpawned = (GameObject)Instantiate(bulletPrefab, bulletsSpawnPos);
-    } 
+        cooldownReady = false;
+        yield return new WaitForSeconds(cooldown);
+        cooldownReady = true;
+    }
 }
