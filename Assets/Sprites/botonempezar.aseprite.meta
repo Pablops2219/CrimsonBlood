@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0c12b0b0e2aa6f5489018b3348f10f7a
+guid: 1511fbf0d14af5741afae3f9c36e2399
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -119,18 +119,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: ak-47NoeArriba
+  - name: botonempezar
     originalName: 
-    pivot: {x: 1.1428572, y: -0.016129032}
+    pivot: {x: 0.4966997, y: -0.022222225}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 7
-      height: 62
-    spriteID: f374db045ee967f41ae877372680e1a7
+      width: 303
+      height: 135
+    spriteID: 526aa6d24bb67f7418e29ee20ec5d306
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -138,27 +138,27 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 4, y: 4}
+    uvTransform: {x: -2, y: 1}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 232813739
-    name: ak-47NoeArriba
+    guid: 665387580
+    name: botonempezar
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: ak-47NoeArriba
+    - name: botonempezar
       frameIndex: 0
       cellRect:
-        x: 24
-        y: 1
-        width: 7
-        height: 62
-      spriteId: f374db045ee967f41ae877372680e1a7
+        x: 0
+        y: 0
+        width: 313
+        height: 144
+      spriteId: 526aa6d24bb67f7418e29ee20ec5d306
     linkedCells: []
     parentIndex: -1
   platformSettings: []
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
+  canvasSize: {x: 313, y: 144}
