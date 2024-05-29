@@ -70,3 +70,13 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/Sprites/eneimgo02.png.meta
+Assets/Sprites/enemigo01.png.meta
+Assets/Sprites/enemigo03.png.meta
+Assets/Sprites/Escopeta.png.meta
+Assets/Sprites/EscopetaVistaArriba.png.meta
+Assets/Sprites/kniveNoe.png.meta
+Assets/Sprites/perro01.png.meta
+Assets/Sprites/VidaCorazón.png.meta
+Assets/Sprites/Ak-47Noe.png.meta
+Assets/Scenes/Enemigos.unity.meta
