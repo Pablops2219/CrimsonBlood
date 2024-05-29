@@ -355,6 +355,10 @@ PrefabInstance:
       propertyPath: bulletsSpawnPos
       value: 
       objectReference: {fileID: 1612147281}
+    - target: {fileID: 7388577617384689499, guid: dd4a7408423ca0548a707394f230744d, type: 3}
+      propertyPath: disparoCooldown
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7892706320830574118, guid: dd4a7408423ca0548a707394f230744d, type: 3}
       propertyPath: m_Name
       value: Player
