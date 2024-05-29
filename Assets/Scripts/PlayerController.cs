@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     public float disparoCooldown = 0.2f; // Cooldown time between shots
     public float atacarCooldown = 1f; 
     private bool cooldownReady = true; // Indicates if the cooldown is ready
+    public GameObject ak;
+    
+    // Variable para controlar si el jugador está bloqueado o no
+    private bool isBlocked = false;
 
     void Start()
     {
@@ -24,8 +28,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (weaponEquipped == 1)
+        {
+            ak.SetActive(true);
+        } else { ak.SetActive(false); }
         // Check if the cooldown is ready
-        if (cooldownReady)
+        if (cooldownReady && !isBlocked) // Añade la condición !isBlocked
         {
             if (Input.GetAxisRaw("Fire1")>0 && weaponEquipped == 1)
             {
@@ -33,7 +41,7 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(StartCooldown(disparoCooldown));
             }
         }
-        if (!atacando)
+        if (!atacando && !isBlocked) // Añade la condición !isBlocked
         {
             if (Input.GetButtonDown("Fire1") && weaponEquipped == 0)
             {
@@ -58,11 +66,11 @@ public class PlayerController : MonoBehaviour
     {
         isWalking = _playerMovement.m_Movement.magnitude > 0;
 
-        if (isWalking && !atacando)
+        if (isWalking && !atacando && !isBlocked) // Añade la condición !isBlocked
         {
             animator.SetBool("isWalking", true) ;
         }
-        else if (!atacando)
+        else if (!atacando && !isBlocked) // Añade la condición !isBlocked
         {
             animator.SetBool("isWalking", false) ;
         }
@@ -98,7 +106,25 @@ public class PlayerController : MonoBehaviour
         // Wait for the cooldown duration
         yield return new WaitForSeconds(atacarCooldown);
         atacando = false;
-        
     }
 
+    // Método para bloquear el movimiento del jugador
+    public void BlockPlayerMovement()
+    {
+        isBlocked = true;
+    }
+
+    // Método para desbloquear el movimiento del jugador
+    public void UnblockPlayerMovement()
+    {
+        isBlocked = false;
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bala"))
+        {
+            Debug.Log("GameOver");
+        }
+    }
 }

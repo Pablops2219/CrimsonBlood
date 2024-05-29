@@ -6,16 +6,23 @@ public class EnemyPatrolAndChase : MonoBehaviour
 {
     public Transform[] patrolPoints; // Puntos de patrulla
     public float patrolSpeed = 2f; // Velocidad de patrulla
-    public float chaseSpeed = 3.5f; // Velocidad de persecuci髇
-    public Vector2 detectionAreaSize = new Vector2(5f, 5f); // Tama駉 del 醨ea de detecci髇 (ancho y alto)
-    public Vector2 detectionAreaOffset = Vector2.zero; // Desplazamiento del 醨ea de detecci髇
+    public float chaseSpeed = 3.5f; // Velocidad de persecuci贸n
+    public Vector2 detectionAreaSize = new Vector2(5f, 5f); // Tama帽o del 谩rea de detecci贸n (ancho y alto)
+    public Vector2 detectionAreaOffset = Vector2.zero; // Desplazamiento del 谩rea de detecci贸n
     public Transform player; // El jugador
-    public float chaseTime = 2f; // Tiempo de persecuci髇 despu閟 de perder de vista al jugador
+    public float chaseTime = 2f; // Tiempo de persecuci贸n despu茅s de perder de vista al jugador
 
     private int currentPatrolIndex;
     private bool isChasing;
     private float chaseTimer;
     private Vector3 initialPosition;
+    
+    public GameObject bala; // Prefab de la bala
+    public Transform puntoDisparo; // Punto de disparo como Transform
+
+    public float disparoCooldown = 0.7f; // Tiempo de enfriamiento entre disparos
+    private bool cooldownReady = true; // Indica si el enfriamiento est谩 listo
+
 
     void Start()
     {
@@ -55,7 +62,12 @@ public class EnemyPatrolAndChase : MonoBehaviour
     {
         if (player != null)
         {
-            MoveTowards(player.position, chaseSpeed);
+            LookTowards(player.position);
+            if (cooldownReady)
+            {
+                DispararPistola();
+                StartCoroutine(StartCooldown(disparoCooldown));
+            }
         }
 
         chaseTimer -= Time.deltaTime;
@@ -65,6 +77,23 @@ public class EnemyPatrolAndChase : MonoBehaviour
         }
     }
 
+    private void DispararPistola()
+    {
+        // Instancia la bala y establece su direcci贸n
+        GameObject balaInst = Instantiate(bala, puntoDisparo.position, puntoDisparo.rotation);
+        balaInst.GetComponent<Bala>().SetPuntoDisparo(player.position);
+    }
+
+    IEnumerator StartCooldown(float cooldown)
+    {
+        // Establece el indicador de enfriamiento en falso
+        cooldownReady = false;
+        // Espera la duraci贸n del enfriamiento
+        yield return new WaitForSeconds(cooldown);
+        // Establece el indicador de enfriamiento en verdadero despu茅s de la duraci贸n
+        cooldownReady = true;
+    }
+    
     void MoveTowards(Vector3 targetPosition, float speed)
     {
         Vector3 direction = (targetPosition - transform.position).normalized;
@@ -76,6 +105,13 @@ public class EnemyPatrolAndChase : MonoBehaviour
             Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle + 90));
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 5 * Time.deltaTime);
         }
+    }
+
+    void LookTowards(Vector3 targetPosition)
+    {
+        Vector3 direction = targetPosition - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 90)); // +90 para que la rotaci贸n sea correcta
     }
 
     void DetectPlayer()
