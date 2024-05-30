@@ -5,6 +5,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public Camera cam;
     public Vector2 m_Movement ;
+    public Vector2 mousePos;
 
     public static PlayerMovement playerMovement;
 
@@ -12,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
 
     public bool moveEnabled { get; set; } = true;
 
-    public Vector2 mousePos { get; set; }
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -55,10 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ProcessCursorInputs()
     {
-        if (Input.mousePosition.x >= 0 && Input.mousePosition.x <= Screen.width &&
-            Input.mousePosition.y >= 0 && Input.mousePosition.y <= Screen.height)
-        {
-            mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        }
+        // Convertir la posición del cursor a coordenadas del mundo
+        mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
     }
 }

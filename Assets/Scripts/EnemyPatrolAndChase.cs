@@ -116,23 +116,26 @@ public class EnemyPatrolAndChase : MonoBehaviour
 
     void DetectPlayer()
     {
-        if (player != null)
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject playerObject in players)
         {
             Vector2 detectionCenter = (Vector2)transform.position + detectionAreaOffset;
-            Rect detectionRect = new Rect(detectionCenter - detectionAreaSize / 2, detectionAreaSize);
+            Vector2 playerPosition = playerObject.transform.position;
 
-            if (detectionRect.Contains(player.position))
+            if (Vector2.Distance(detectionCenter, playerPosition) < detectionAreaSize.x / 2)
             {
                 isChasing = true;
                 chaseTimer = chaseTime;
+                player = playerObject.transform;
+                return; // Exit the loop after detecting one player
             }
         }
+
+        // If no player is detected, stop chasing
+        isChasing = false;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Vector2 detectionCenter = (Vector2)transform.position + detectionAreaOffset;
-        Gizmos.DrawWireCube(detectionCenter, detectionAreaSize);
-    }
+
+    
 }

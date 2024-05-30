@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour
     // Variable para controlar si el jugador está bloqueado o no
     private bool isBlocked = false;
 
+    // Variables para el ataque melee
+    public float meleeRange = 1.0f; // Rango del ataque melee
+    public LayerMask enemyLayer;    // Capa que define los enemigos
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -31,16 +35,22 @@ public class PlayerController : MonoBehaviour
         if (weaponEquipped == 1)
         {
             ak.SetActive(true);
-        } else { ak.SetActive(false); }
+        }
+        else 
+        { 
+            ak.SetActive(false); 
+        }
+
         // Check if the cooldown is ready
         if (cooldownReady && !isBlocked) // Añade la condición !isBlocked
         {
-            if (Input.GetAxisRaw("Fire1")>0 && weaponEquipped == 1)
+            if (Input.GetAxisRaw("Fire1") > 0 && weaponEquipped == 1)
             {
                 DispararPistola();
                 StartCoroutine(StartCooldown(disparoCooldown));
             }
         }
+
         if (!atacando && !isBlocked) // Añade la condición !isBlocked
         {
             if (Input.GetButtonDown("Fire1") && weaponEquipped == 0)
@@ -57,7 +67,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             weaponEquipped = (weaponEquipped == 0) ? 1 : 0;
-            animator.SetInteger("weaponEquipped",weaponEquipped);
+            animator.SetInteger("weaponEquipped", weaponEquipped);
             Debug.Log(weaponEquipped);
         }
     }
@@ -68,11 +78,11 @@ public class PlayerController : MonoBehaviour
 
         if (isWalking && !atacando && !isBlocked) // Añade la condición !isBlocked
         {
-            animator.SetBool("isWalking", true) ;
+            animator.SetBool("isWalking", true);
         }
         else if (!atacando && !isBlocked) // Añade la condición !isBlocked
         {
-            animator.SetBool("isWalking", false) ;
+            animator.SetBool("isWalking", false);
         }
     }
 
@@ -96,10 +106,22 @@ public class PlayerController : MonoBehaviour
     bool atacando;
     private void Atacar()
     {
-        Debug.Log("X");
         animator.SetTrigger("atacando");
+
+        // Detectar todos los colliders en el rango de ataque
+        Collider2D[] hitObjects = Physics2D.OverlapCircleAll(puntoDisparo.position, meleeRange);
+
+        // Iterar a través de todos los colliders golpeados y destruir aquellos que tengan la etiqueta "Enemy"
+        foreach (Collider2D hitObject in hitObjects)
+        {
+            if (hitObject.CompareTag("Enemy"))
+            {
+                Debug.Log("Golpeado: " + hitObject.name);
+                Destroy(hitObject.gameObject); // Destruir al enemigo golpeado
+            }
+        }
     }
-    
+
     IEnumerator StartCooldownAtaque()
     {
         atacando = true;
@@ -119,12 +141,24 @@ public class PlayerController : MonoBehaviour
     {
         isBlocked = false;
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bala"))
         {
             Debug.Log("GameOver");
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        // Si el punto de disparo no está asignado, salir del método
+        if (puntoDisparo == null) return;
+
+        // Establecer el color del Gizmo a rojo
+        Gizmos.color = Color.red;
+
+        // Dibujar una esfera en el punto de disparo con el radio del rango melee
+        Gizmos.DrawWireSphere(puntoDisparo.position, meleeRange);
     }
 }
