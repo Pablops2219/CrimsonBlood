@@ -11,6 +11,9 @@ public class PlayerAwarenessController : MonoBehaviour
     [SerializeField]
     private float _playerAwarenessDistance;
 
+    [SerializeField]
+    private float _fieldOfViewAngle = 90f; // Ángulo de visión del enemigo
+
     public Transform _player;
 
     private void Awake()
@@ -24,7 +27,7 @@ public class PlayerAwarenessController : MonoBehaviour
         Vector2 enemyToPlayerVector = _player.position - transform.position;
         DirectionToPlayer = enemyToPlayerVector.normalized;
 
-        if (enemyToPlayerVector.magnitude <= _playerAwarenessDistance)
+        if (enemyToPlayerVector.magnitude <= _playerAwarenessDistance && IsPlayerInFieldOfView(enemyToPlayerVector))
         {
             AwareOfPlayer = true;
         }
@@ -32,5 +35,17 @@ public class PlayerAwarenessController : MonoBehaviour
         {
             AwareOfPlayer = false;
         }
+
+        }
+
+    private bool IsPlayerInFieldOfView(Vector2 enemyToPlayerVector)
+    {
+        // Dirección en la que el enemigo está mirando
+        Vector2 enemyForward = transform.up;
+
+        // Ángulo entre la dirección del enemigo y la dirección al jugador
+        float angleToPlayer = Vector2.Angle(transform.up, enemyToPlayerVector);
+
+        return angleToPlayer < 90f ;
     }
 }

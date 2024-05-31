@@ -30,9 +30,6 @@ public class Bala : MonoBehaviour
         float randomFactor = Random.Range(-variacionDireccion, variacionDireccion);
         Vector2 finalDir = dir + perpendicularDir * randomFactor;
 
-        // Output the direction for debugging purposes
-        Debug.Log($"Direction: {finalDir.x}, {finalDir.y}");
-
         // Aplicar la fuerza en la dirección final
         rb.AddForce(finalDir * F_bala, ForceMode2D.Impulse);
 
