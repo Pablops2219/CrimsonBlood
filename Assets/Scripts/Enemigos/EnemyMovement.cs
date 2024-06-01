@@ -32,6 +32,11 @@ public class EnemyMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerAwarenessController = GetComponent<PlayerAwarenessController>();
         _targetDirection = transform.up;
+        puntoDisparo = transform.Find("puntoDisparo");
+        if (puntoDisparo == null)
+        {
+            Debug.LogError("No se encontró un GameObject llamado 'puntoDisparo' en la jerarquía del enemigo.");
+        }
     }
 
     private void FixedUpdate()
