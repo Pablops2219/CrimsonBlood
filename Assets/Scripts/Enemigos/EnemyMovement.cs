@@ -26,9 +26,10 @@ public class EnemyMovement : MonoBehaviour
     public Transform player; // El jugador
     public float disparoCooldown = 0.7f; // Tiempo de enfriamiento entre disparos
     private bool cooldownReady = true; // Indica si el enfriamiento está listo
-
+    private AudioSource audioSource;
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerAwarenessController = GetComponent<PlayerAwarenessController>();
         _targetDirection = transform.up;
@@ -101,6 +102,7 @@ public class EnemyMovement : MonoBehaviour
     
     private void DispararPistola()
     {
+        audioSource.Play();
         // Instancia la bala y establece su dirección
         GameObject balaInst = Instantiate(bala, puntoDisparo.position, puntoDisparo.rotation);
         balaInst.GetComponent<Bala>().SetPuntoDisparo(player.position);

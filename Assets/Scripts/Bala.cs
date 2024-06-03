@@ -8,10 +8,12 @@ public class Bala : MonoBehaviour
     [SerializeField] private float F_bala;
     [SerializeField] private float variacionDireccion = 0.5f;  // Increased factor for more noticeable variation
     private Rigidbody2D rb;
+    private PlayerController playerController;
 
     // Start is called before the first frame update
     void Start()
     {
+        playerController = FindObjectOfType<PlayerController>();
         rb = GetComponent<Rigidbody2D>();
         Disparo();
     }
@@ -19,6 +21,7 @@ public class Bala : MonoBehaviour
     // Método para disparar la bala
     public void Disparo()
     {
+        
         // Calcular la dirección hacia el punto de disparo
         Vector2 dir = puntoDisparo - (Vector2)transform.position;
         dir.Normalize();
@@ -33,8 +36,9 @@ public class Bala : MonoBehaviour
         // Aplicar la fuerza en la dirección final
         rb.AddForce(finalDir * F_bala, ForceMode2D.Impulse);
 
-        // Destruir la bala después de 1 segundo
-        Destroy(this.gameObject, 1f);
+        // Destruir la bala después de 1 segundo si no ha colisionado
+        Destroy(this.gameObject, 1);
+        
     }
 
     // Método para establecer el punto de disparo
@@ -48,9 +52,13 @@ public class Bala : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(collision.gameObject);  // Destruye el enemigo
+            playerController.sumarPuntuacion(10);
+            Destroy(collision.gameObject);
         }
 
-        Destroy(this.gameObject);  // Destruye la bala
+        
+        Destroy(this.gameObject);
     }
+
+    
 }

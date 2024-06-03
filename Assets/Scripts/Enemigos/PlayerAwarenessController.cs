@@ -11,9 +11,6 @@ public class PlayerAwarenessController : MonoBehaviour
     [SerializeField]
     private float _playerAwarenessDistance;
 
-    [SerializeField]
-    private float _fieldOfViewAngle = 90f; // Ángulo de visión del enemigo
-
     public Transform _player;
 
     private void Awake()
